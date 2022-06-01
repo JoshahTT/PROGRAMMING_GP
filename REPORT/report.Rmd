@@ -67,6 +67,7 @@ library(metan) #a collection of functions that implement a workflow-based approa
 library(ranger) #a fast implementation of random forests
 library(xgboost) #Extreme Gradient Boosting
 library(visdat) #To provide visualisations of an entire dataframe at once
+library(olsrr)
 ```
 
 ### **DESCRIPTION OF DATA**
@@ -537,7 +538,12 @@ last_fit_rf %>%
 
 
 ### **REGRESSION**
-Fill up here
+##Finding Regression Model for Popularity
+full_regmodel<-lm(popularity ~ ., data=df3)
+
+ols_step_both_p(full_regmodel,penter=0.05,prem=1)
+
+Best_model<-ols_step_all_possible(full_regmodel);Best_model
 
 
 ## **ASSESSMENT**
