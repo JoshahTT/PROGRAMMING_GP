@@ -21,19 +21,22 @@ options(knitr.table.format = "html")
 
 ## **INTRODUCTION**
 `r text_spec("**1. Background**", background = "#D05A6E", color = "white", bold = T)`<br> 
-Fill up here
+"In the entertainment industry, there is an increase demand for variety of forms and expressions in entertainment to be represented in the community. Music is one form of entertainment highly demanded by all-ages within the market. As the society advances in along with the changes in social science and politics, this leads to a change in the form of music represented or expresses the condition of the community at the point of time. For instance, Rhythm and Blues (R&B) is popular in the 80's while Rap and Reggae is popular in the 90's and Electronic Dance Music (EDM) is formed in early 21st century. Songs classification is a topic which seeks to understand the user's interest to a specific genre based on their previous historical selection of songs. This research seeks to understand what are the variables that would be contribute as an insight and utilise machine learning such as XGBoost to classify the appropriate song genre as a recommendation."
 
 <br> <br> <br> <br> <br>
 `r text_spec("**2. Problem Statement**", background = "#D05A6E", color = "white", bold = T)`<br>
-Fill up here
+"How can we select the best recommended song based on users' historical song selection?"
 
 <br> <br> <br> <br> <br>
 `r text_spec("**3. Objectives**", background = "#D05A6E", color = "white", bold = T)`<br> 
-Fill up here
+"We would be performing the procedures as below: 
+  1) Performing Data Cleaning and extract datasets for Year 2020.
+  2) Performing Data Analysis and identifying relationship between variables.
+  3) Implementing Machine Learning models such as classification and regression."
 
 <br> <br> <br> <br> <br>
 `r text_spec("**4. Details' Dataset**", background = "#D05A6E", color = "white", bold = T)`<br> 
-Fill up here
+"The dataset is collected from Spotify and stored in Kaggle with the topic "Spotify Top Tracks Popularity Analysis". For this research, we have chosen to only look at dataset from Year 2020 which consists of 11607 entries and variables such as country, popularity, title, artist, album_single,	artist_followers, explicit,	album,	release_date,	track_number,	tracks_in_album,	danceability,	energy,	key,	loudness,	mode, speechiness,	acoustics,	instrumentalness,	liveliness,	valence,	tempo,	duration_ms,	time_signature,	genre_new,	days_since_release and cluster"
 
 <br> <br> <br> <br> <br>
 
