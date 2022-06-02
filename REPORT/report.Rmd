@@ -80,9 +80,10 @@ library(ranger) #a fast implementation of random forests
 library(xgboost) #Extreme Gradient Boosting
 library(visdat) #To provide visualisations of an entire dataframe at once
 library(magrittr)#To provide a mechanism for chaining commands with a new forward-pipe operator, %>%.
-library(hexbin) #hexbin chart
-library(cowplot) #a simple add-on to ggplot
-library(reshape2) #to transform data between wide and long formats
+library(hexbin) #To apply hexbin chart
+library(cowplot) #A simple add-on to ggplot
+library(reshape2) #To transform data between wide and long formats
+library(olsrr) #Application of best regression model checks
 ```
 
 ### **DESCRIPTION OF DATA**
@@ -676,7 +677,18 @@ last_fit_rf %>%
 
 
 ### **REGRESSION**
-Fill up here
+All_variable_model<-lm(ppularity~.,data=df3)
+
+Best_model<-ols_step_all_possible(All_variable_model);All_variable_model
+
+##Check for best model based on integer and numerical variable only
+
+full_regmodel<-lm(popularity ~ + artist_followers + track_number + tracks_in_album
+		+ danceability + energy + key + loudness + mode + speechiness
+		+ acoustics + instrumentalness + liveliness + valence + tempo
+		+ duration_ms + time_signature + days_since_release + genre_new, data=df3)
+ols_step_both_p(full_regmodel,penter=0.05,prem=1)
+
 
 
 ## **ASSESSMENT**
