@@ -39,12 +39,44 @@ options(knitr.table.format = "html")
 
 **The dataset is collected from Spotify and stored in Kaggle with the topic "Spotify Top Tracks Popularity Analysis". For this research, we have chosen to only look at dataset from Year 2020 which has 11607 and variables is as follows:**<br>
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(DT)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Printing the table
 variables = c("country", "popularity", "title", "artist", "album_single",	"artist_followers", "explicit",	"album",	"release_date",	"track_number", "tracks_in_album",	"danceability",	"energy",	"key",	"loudness",	"mode", "speechiness",	"acoustics",	"instrumentalness",	"liveliness",	"valence",	"tempo",	"duration_ms",	"time_signature",	"genre_new",	"days_since_release", "cluster")
-explanation = c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","aa")
+explanation = c("Global and 34 countries where Spotify operates",
+                "The popularity score calculated taking into account both the number of days a song stayed in the Top200 and the position it stayed in every day, weighting more the top positions",
+                "Name of a song",
+                "Name of the songs' artist",
+                "Whether the song was published as a single or as part of an album or compilation",
+                "The number of followers the artist has on Spotify on the 5th of November 2020",
+                "Whether the song is rated as ‘Parental Advisory Explicit Content’ or not",
+                "Name of the album the song belongs to",
+                "Date on which the song was published",
+                "The position of the song on its respective album",
+                "Total songs present in the album",
+                "How suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable",
+                "It is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy",
+                "The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation. E.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1",
+                "The overall loudness of a track in decibels (dB). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typical range between -60 and 0 db",
+                "indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0",
+                "Speechiness detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks",
+                "A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic",
+                "Predicts whether a track contains no vocals. “Ooh” and “aah” sounds are treated as instrumental in this context. Rap or spoken word tracks are clearly “vocal”. The closer the instrumentalness: value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0",
+                "Detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. A value above 0.8 provides strong likelihood that the track is live",
+                "A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry)",
+                "The overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration",
+                "The duration of the track in milliseconds",
+                "An estimated overall time signature of a track. The time signature (meter) is a notational convention to specify how many beats are in each bar (or measure)",
+                "The predominant genre of an artist according to our reclassification of Spotify’s 1200 genres",
+                "Number of days passe from the release of the track",
+                "Cluster of songs according to genre")
 dat = data.frame(variables,explanation)
-knitr::kable(dat, "simple", col.names = c("**ATTRIBUTES**", "**DESCRIPTION**"), align = c("cc"))
+datatable(dat, rownames=FALSE, filter = 'top', options = list(pageLength = 5), class = 'hover cell - border stripe', colnames = c("VARIABLES","DESCRIPTION"))
+
+#knitr::kable(dat, "simple", col.names = c("**ATTRIBUTES**", "**DESCRIPTION**"), align = c("cc"))
 ```
 
 <br>
@@ -80,10 +112,9 @@ library(ranger) #a fast implementation of random forests
 library(xgboost) #Extreme Gradient Boosting
 library(visdat) #To provide visualisations of an entire dataframe at once
 library(magrittr)#To provide a mechanism for chaining commands with a new forward-pipe operator, %>%.
-library(hexbin) #To apply hexbin chart
-library(cowplot) #A simple add-on to ggplot
-library(reshape2) #To transform data between wide and long formats
-library(olsrr) #Application of best regression model checks
+library(hexbin) #hexbin chart
+library(cowplot) #a simple add-on to ggplot
+library(reshape2) #to transform data between wide and long formats
 ```
 
 ### **DESCRIPTION OF DATA**
@@ -208,8 +239,10 @@ write.csv(df3, "data_cleaned.csv")
 ### **DATA OVERVIEW**
 <br><center>**Here is an overview at the dataset after cleaning and manipulation**</center><br>
 
-```{r, echo=FALSE}
-datatable(head(df3, 100))
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#datatable(head(df3, 100))
+datatable(df3, extensions = 'Buttons', rownames=FALSE, filter = 'top', options = list(pageLength = 10, dom ='Bfrtip', 
+                         buttons =c('copy', 'csv','excel','pdf', 'print'), class = 'hover cell - border stripe'))
 ```
 
 ## **DATA ANALYSIS** {.tabset}
@@ -426,9 +459,7 @@ plot(correlation)
 <br>**a. Feature Selection**<br>
 ```{r}
 #Subset with selected audio feature predictors 
-df4 <- subset(df3, select=c(
-                            "acoustics", "danceability","energy",
-                             "speechiness","valence","genre_new"))
+df4 <- subset(df3, select=c("acoustics", "danceability","energy","speechiness","valence","genre_new"))
 
 #Check the subset
 names(df4)
@@ -677,18 +708,38 @@ last_fit_rf %>%
 
 
 ### **REGRESSION**
-All_variable_model<-lm(ppularity~.,data=df3)
 
-Best_model<-ols_step_all_possible(All_variable_model);All_variable_model
+`r text_spec("**1. Subset the data**", background = "#D05A6E", color = "white", bold = T)`
+```{r results='hide'}
+df5 = subset(df3, select = c("popularity","danceability","loudness","valence","energy"))
+```
 
-##Check for best model based on integer and numerical variable only
+`r text_spec("**2. Overview of the dataset**", background = "#D05A6E", color = "white", bold = T)`
+```{r, echo=FALSE}
+datatable(df5, extensions = 'Buttons', rownames=FALSE, filter = 'top', options = list(pageLength = 5, dom ='Bfrtip', 
+                         buttons =c('copy', 'csv','excel','pdf', 'print'), class = 'hover cell - border stripe'))
+```
 
-full_regmodel<-lm(popularity ~ + artist_followers + track_number + tracks_in_album
-		+ danceability + energy + key + loudness + mode + speechiness
-		+ acoustics + instrumentalness + liveliness + valence + tempo
-		+ duration_ms + time_signature + days_since_release + genre_new, data=df3)
-ols_step_both_p(full_regmodel,penter=0.05,prem=1)
+`r text_spec("**3. Check the correlation**", background = "#D05A6E", color = "white", bold = T)`
+```{r}
+plot(df5,col=c("red","blue"))
+```
 
+`r text_spec("**4. Fit a model with multiple regression**", background = "#D05A6E", color = "white", bold = T)`
+```{r}
+multiple.regression = lm(popularity ~ danceability + energy + loudness + valence, data = df5)
+```
+
+`r text_spec("**5. Summary of the model**", background = "#D05A6E", color = "white", bold = T)`
+```{r}
+summary(multiple.regression)
+```
+
+
+```{r}
+plot(multiple.regression,col=c("red","blue"))
+```
+<br><br>
 
 
 ## **ASSESSMENT**
