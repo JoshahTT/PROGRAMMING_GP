@@ -1,7 +1,7 @@
 ---
 title: "**SONGS CLASSIFICATION FROM SPOTIFY DATASETS YEAR 2020**"
-author: ""
-date: ""
+author: ""Joshah (S2138074), Kristian (S2043845), Sharmini (S2114595), Min Jie (S2104353), Khai Mun (S2027890)""
+date: "15 June 2022"
 output: 
   html_document:
     theme: bootstrap
@@ -743,12 +743,10 @@ plot(multiple.regression,col=c("red","blue"))
 
 
 ## **ASSESSMENT**
-Fill up here
+
+On the regression section, the model shows that popularity is highly dependent on danceability, energy, loudness and valence.
 
 ## **CONCLUSION**
-Fill up here
-
-## **REFERENCES**
 Fill up here
 
 ## **AUTHORS**
