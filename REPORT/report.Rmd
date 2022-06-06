@@ -676,7 +676,7 @@ report_4
 
 <br>
 <br>**i. Predictor Test**<br>
-```{r,results='hide'}
+```{r, results='hide'}
 #Generate predictions from the test set
 test_predictions = rf_tune %>% collect_predictions()
 test_predictions
@@ -743,7 +743,15 @@ plot(multiple.regression,col=c("red","blue"))
 
 
 ## **ASSESSMENT**
-Fill up here
+
+`r text_spec("**1. Classification models analysis**", background = "#D05A6E", color = "white", bold = T)`
+
+**A Shannon diversity index of 0.65 was obtained from the dataset. Based on this value, we can conclude that the genre classes in the data are fairly distributed. Following that, a subset with the selected features was created to start processing the classifier models. The new dataset contains five (5) predictors which are acousticsness, danceability, energy, speechiness, and valence, as well as the genre as the outcome variable.**
+
+**For this analysis, we allocated 80% of the data to the train set and 20% of the remaining data to the test set. The recipe, model specification, and workflow are three objects that were built to tune and evaluate predictive models. Furthermore, the algorithms chosen for this analysis were Random Forest, K-Nearest Neighbor, and Boosted Tree, with a validation set of 5 folds.**
+
+**The results of the algorithms showed that the Random Forest model outperformed the other algorithms. Precision and recall scores were significantly lower than specificity and roc-auc scores. This implies that the model may be better at detecting true positives and true negatives than false positives and false negatives. Besides that, because specificity was the highest performance score among all evaluation metrics, the model may be particularly well suited to detecting true negatives.**
+
 
 ## **CONCLUSION**
 Fill up here
@@ -755,8 +763,8 @@ Fill up here
 
 <center>**PREPARED BY**</center><br>
 ```{r echo=FALSE}
-student = c("aa", "Kristian Surya Dinata", "cc", "dd", "ee")
-matric = c(11,"S2043845",33,44,55)
+student = c("**Joshah Tio Yong Zheng**", "**Kristian Surya Dinata**", "**Khai Mun**", "**Min Jie**", "**Sharmini Joseph Pereira**")
+matric = c("S2138074","S2043845","S2027890","S2104353","S2114595")
 people = data.frame(student,matric)
 knitr::kable(people, "simple", col.names = c("Name", "Matric No."), align = c("cc"))
 ```
