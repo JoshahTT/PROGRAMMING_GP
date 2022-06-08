@@ -1,7 +1,7 @@
 ---
 title: "**SONGS CLASSIFICATION FROM SPOTIFY DATASETS YEAR 2020**"
-author: ""
-date: ""
+author: "Kristian S.D. (s2043845), Joshah T.Y.Z. (s2138074), Sharmini J.P. (s2114594), Min J.E. (s2104353), Khai M.Q. (s2027890)"
+date: "8th June 2022"
 output: 
   html_document:
     theme: bootstrap
@@ -181,6 +181,7 @@ df2 = na.omit(df2)
 df2 = df2 %>% select(-c(uri,genre))
 df3 = df2[-c(27:148)]
 df3
+rownames(df3) = seq(length=nrow(df3))
 ```
 
 `r text_spec("**3. Creating box plot of the audio features to find any extreme outliers**", background = "#D05A6E", color = "white", bold = T)`
@@ -709,25 +710,46 @@ last_fit_rf %>%
 
 ### **REGRESSION**
 
-`r text_spec("**1. Subset the data**", background = "#D05A6E", color = "white", bold = T)`
+## Check Correlation of Popularity to other numerical and integer variables
+
+##**Check for Normality**
+hist(df3$popularity) ##not normal, failed and cannot proceed with linear regression
+
+#Further test on Normality:
+full_linregmodel<-lm(popularity ~ artist_followers + explicit + track_number + tracks_in_album
+		+ danceability + energy + key + loudness + mode + speechiness
+		+ acoustics + instrumentalness + liveliness + valence + tempo
+		+ duration_ms + time_signature + days_since_release, data=df3[sample(nrow(df3),5000,replace=FALSE),])
+ols_test_normality(full_linregmodel)
+ols_plot_resid_qq(full_linregmodel)
+ols_plot_resid_hist(full_linregmodel)
+
+
+### Linear regression model is not suitable as the variables do not follow the assumption of normality
+`r text_spec("**1. Check for Normality of the dependent variable: Popularity**", background = "#D05A6E", color = "white", bold = T)`
 ```{r results='hide'}
-df5 = subset(df3, select = c("popularity","danceability","loudness","valence","energy"))
+hist(df3$popularity)
+##dependent variable not normal, failed and cannot proceed with linear regression analysis. We will consider non-linear regressions
 ```
 
-`r text_spec("**2. Overview of the dataset**", background = "#D05A6E", color = "white", bold = T)`
+`r text_spec("**2. Check the correlation with dependent variable: Popularity**", background = "#D05A6E", color = "white", bold = T)`
+```{r}
+Correlationstats<-cor(df3[,c("popularity","danceability","energy"
+,"key","loudness","mode","speechiness","acoustics","instrumentalness","liveliness"
+,"valence","tempo","duration_ms","time_signature","days_since_release")]);Correlationstats[2:15,1]
+## Note that only "danceability","liveliness" and "valance" show significant correlation of >5%.
+```
+
+`r text_spec("**3. Overview of the dataset**", background = "#D05A6E", color = "white", bold = T)`
 ```{r, echo=FALSE}
+df5<-subset(df3, select = c("popularity","danceability","liveliness","valence"))
 datatable(df5, extensions = 'Buttons', rownames=FALSE, filter = 'top', options = list(pageLength = 5, dom ='Bfrtip', 
                          buttons =c('copy', 'csv','excel','pdf', 'print'), class = 'hover cell - border stripe'))
 ```
 
-`r text_spec("**3. Check the correlation**", background = "#D05A6E", color = "white", bold = T)`
-```{r}
-plot(df5,col=c("red","blue"))
-```
-
 `r text_spec("**4. Fit a model with multiple regression**", background = "#D05A6E", color = "white", bold = T)`
 ```{r}
-multiple.regression = lm(popularity ~ danceability + energy + loudness + valence, data = df5)
+multiple.regression <- gam(popularity ~ s(danceability) + s(liveliness) + s(valence), data=df5)
 ```
 
 `r text_spec("**5. Summary of the model**", background = "#D05A6E", color = "white", bold = T)`
@@ -750,14 +772,13 @@ plot(multiple.regression,col=c("red","blue"))
 
 **For this analysis, we allocated 80% of the data to the train set and 20% of the remaining data to the test set. The recipe, model specification, and workflow are three objects that were built to tune and evaluate predictive models. Furthermore, the algorithms chosen for this analysis were Random Forest, K-Nearest Neighbor, and Boosted Tree, with a validation set of 5 folds.**
 
-**The results of the algorithms showed that the Random Forest model outperformed the other algorithms. Precision and recall scores were significantly lower than specificity and roc-auc scores. This implies that the model may be better at detecting true positives and true negatives than false positives and false negatives. Besides that, because specificity was the highest performance score among all evaluation metrics, the model may be particularly well suited to detecting true negatives.**
+**By classification analysis, the results of the algorithms showed that the Random Forest model outperformed the other algorithms. Precision and recall scores were significantly lower than specificity and roc-auc scores. This implies that the model may be better at detecting true positives and true negatives than false positives and false negatives. Besides that, because specificity was the highest performance score among all evaluation metrics, the model may be particularly well suited to detecting true negatives.**
+
+**By regression analysis, the dependent variable, popularity, shows little to no correlation with the other numerical and integer variable of the dataset. However, by utilising variables such as danceability, livliness, and valence which has correlation of at least 5% would allow to consider non-linear regression application such as the generalized addictive model to fit a nonparametric curve to the data without specifying any particular mathematical model to describe the nonlinearity. The model overall showed smoothed fitting, with the stated three variables showing significant relation to dependent variable, popularity. Further research would need to be look into for a non-parametric fitted curve in determining the popularity of the song based on independent variables.**
 
 
 ## **CONCLUSION**
-Fill up here
-
-## **REFERENCES**
-Fill up here
+**In conclusion, the experiment have shown significant insights on song recommendation to users based on the extracted component songs listened collectively by the respective user. The data cleaning portion required more attention which raises concerns on the initial data collection process. It is also important to note that training the machine learning models would be required in order to produce accurate and appropriate results. We continue to invite further research into data collected from other years, example 2019, 2018 etc. Overall, machine learning models with classification and regression analysis have the capability to futher recommend song preference tailored to a user's historical records.
 
 ## **AUTHORS**
 
