@@ -26,7 +26,17 @@ options(knitr.table.format = "html")
 
 <br>`r text_spec("**2. Problem Statement**", background = "#D05A6E", color = "white", bold = T)`<br>
 
-**How can we select the best recommended song based on users' historical song selection?**
+ **In this section we have identified two problems and its corresponding question regarding song recommendation based on users' historical song selection.
+**1) 
+Problem: What would be the preferred song genre based on available independent variables which are components of a song?
+Question: How would classification model be able to identify the best recommended genre for the user based on the available independent variables?
+
+**2)
+Problem: What independent variables from the historical song record would be able to predict the popularity of the song?
+Question: How would regression model be able to predict the popularity of a song which are dependent on the component of the song?
+
+
+                 key + mode + duration_ms
 
 <br>`r text_spec("**3. Objectives**", background = "#D05A6E", color = "white", bold = T)`<br> 
 
@@ -778,7 +788,11 @@ plot(multiple.regression,col=c("red","blue"))
 
 
 ## **CONCLUSION**
-**In conclusion, the experiment have shown significant insights on song recommendation to users based on the extracted component songs listened collectively by the respective user. The data cleaning portion required more attention which raises concerns on the initial data collection process. It is also important to note that training the machine learning models would be required in order to produce accurate and appropriate results. We continue to invite further research into data collected from other years, example 2019, 2018 etc. Overall, machine learning models with classification and regression analysis have the capability to futher recommend song preference tailored to a user's historical records.
+**In conclusion, the experiment have shown significant insights on song recommendation to users based on the extracted component songs listened collectively by the respective user.
+**Insights:
+1)The data cleaning portion required more attention which raises concerns on the initial data collection process. 
+2)Training the machine learning models with data throughout other years would be required to develop an accurate machine learning models
+**We continue to invite further research into data collected from other years, example 2019, 2018 etc. Overall, machine learning models with classification and regression analysis have the capability to futher recommend song preference tailored to a user's historical records.
 
 ## **AUTHORS**
 
